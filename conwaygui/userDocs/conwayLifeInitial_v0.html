@@ -239,29 +239,7 @@ div.imagedesc{
 
 <div class="body"> 
 <h2>Introduction</h2>
-L'obiettivo del nostro lavoro è creare una GUI che permetta l'accesso e il controllo della nostra applicazione, ConwayLife25.
- 
- <h2>Organizzazione del processo di sviluppo</h2> 
-<div>
-Definizione del software relativo al core-business applicativo (con Cell e Grid) e suo testing
-Definizione di un progetto SpringBoot partendo da Primi passi con SpringBoot
-Directory userDocs con diario di bordo conwaygui_v0.html da Aggiornare incrementalmente
-Innesto esplicito nel package conway del core-bsuiness Java nel workspace del progetto
-Definizione del Controller della GUI ConwayGuiControllerLifeLocal con funzione getserverip che restituisce l’IP del server
-Definizione della pagina HTML guipage.html
-Definizione del codice JavaScript da inserire nella pagina HTML per la costruzione della mappa
-Definizione lato client (commsocket.js) e lato server (WSConwayguiLifeLocal) della interazione via WebSocket
-Definizione del dispositivo ConwayOutput che invia dati via WebSocket
-Il codice Java inserito come parte integrante del servizio:
-
-ha la stessa struttura introdotta in ConwayLife25 in Java
-la classe Life non ha il compito di visualizzare le celle, compito assunto dal ConwayGuiControllerLifeLocal
-elimina ogni dispositivo di input, in quanto i comandi-utente vengono inviati tramite WebSocket
-definisce un dispositivo di output ConwayOutput che implementa IOutDev interface inviando messaggi alla pagina HTML tramite WebSocket
-In questo modo abbiamo un primo microservizio.
-
-</div>
- 
+L'obiettivo del nostro lavoro &egrave; creare una GUI che permetta l'accesso e il controllo della nostra applicazione, ConwayLife25. 
  
  
 <h2>Requirements</h2>
@@ -283,25 +261,67 @@ In questo modo abbiamo un primo microservizio.
 		- un pulsante STOP per fermare l'evoluzione
 		<br>
 		- un pulsante di EXIT per uscire dall'applicazione
+		<br>
+		- un pulsante di CLEAR per dare una nuova configurazione iniziale al gioco
 
- 
+ <br>
 
 <h2>Problem analysis</h2>
- Il requisito indica che la GUI deve essere una pagina HTML che dovrebbe essere fornita da un Web-server e che quindi potrebbe essere aperta da più utenti contemporaneamente.
-
- Chi comanda?
+ Il requisito indica che la GUI deve essere una pagina HTML che dovrebbe essere fornita da un Web-server e che quindi potrebbe essere aperta da pi&ugrave; utenti contemporaneamente.
  <br>
- Nel caso di più utenti, questi potranno vedere la stessa griglia o ognuno vedrà la sua griglia?
-il committente precisa che tutti gli utenti potranno vedere la evoluzione della stessa griglia, ma solo uno potrà inviare comandi di gestione del gioco. Questo utente privilegiato (detto owner) sarà l’utente che ha aperto per primo la pagina HTML.
-chi crea la GUI? Si modifica ConwayLife25 in Java o è meglio lasciare il più possibile inalterato questo software già testato?
-meglio modificare meno possibile ciò che già funziona. ConwayLife25 in Java è stato impostato in modo da essere estendibile senza dover modificare la logica del gioco. In particolare, la parte di output della GUI potrebbe essere aggiornata introducendo una nuova classe che implementa la IOutDev interface in modo da visualizzare lo stato delle celle nella pagina HTML.
-vi sono framework che permettono di realizzare pagine HTML che interagiscono con un server senza dover modificare il software già realizzato in Java. Uno di questi è SpringBoot.
-come si aggiorna? La pagina HTML deve essere aggiornata in modo automatico o l’utente deve premere un pulsante per vedere lo stato delle celle?
-la pagina HTML deve essere aggiornata in modo automatico (per tutti gli utenti connessi) durante la evoluzione del gioco, senza che un utente debba fare nulla. Questo richiede l’uso di WebSocket che permettono di inviare messaggi dal server alla pagina HTML.
-e se si ferma? La pagina HTML potrebbe diventare vuota o rimanere stabile. Come evitare che il gico continui senza che l’utente se ne accorga?
-come si riduce il traffico di rete?
-il traffico di rete può essere ridotto inviando solo le informazioni necessarie per aggiornare la pagina HTML. Ad esempio, inviare solo le celle che cambiano stato e non tutta la griglia.
-tuttavia, un utente che si collega mentre il gioco è in corso dovrebbe vedere lo stato attuale della griglia in modo corretto. Questo richiede che il server invii al nuovo utente tutta la griglia attuale.
+ Se ci&ograve; &egrave; quello che vuole il commitente, e quindi che tutti gli utenti dovranno visualizzare la stessa griglia, bisogna stabilire dei ruoli, in particolare avremo:
+ <br>
+ - un owner -> colui che ha il controllo del gioco e pu&ograve; interagirvici attivamente attraverso la pulsantiera prevista. &Egrave; colui che si &egrave; collegato per primo alla pagina HTML. Pu&ograve;:
+		<br>
+ 		- inizializzare la griglia cliccando sulle celle, cella rossa indica una cella viva, verde ne indica una morta
+		<br>
+		- cliccare il pulsante start dopo aver deciso una configurazione per far partire l'evoluzione
+		<br>
+		- cliccare il pulsante stop per far stoppare un l'andamento dell'evoluzione
+		<br>
+		- cliccare il pulsante clear per ripulire la griglia e decidere una nuova configurazione
+		<br>
+		• lato applicazione ad ogni pulsante lato client corrisponder&agrave; una chiamata a backend che gestisca le operazioni richieste, queste saranno disponibili in un controller, l'interazione tra backend e frontend sar&agrave; presumibilmente controllata da WebSocket
+		<br>
+ - N visualizzatori -> coloro che possono osservare la griglia evolversi, ma non hanno il controllo della pulsantiera
+ <br>
+
+
+<h2>Organizzazione del processo di sviluppo</h2> 
+<div>
+	Come creo la GUI?
+	<br>
+	Primi passi:
+	<br>
+	- Implementare il software relativo alla logica di business (core-business) e testing
+	<br>
+	- Creare un progetto SpringBoot
+	<br>
+	- All'interno del progetto andiamo ad aggiungere una directory (userDocs) improntata come diario di bordo (conwaygui_v0.html) da aggiornare incrementalmente
+	<br>
+	- Creazione del package Java (conway) per la logica di business nel progetto precedentemente creato
+	<br>
+
+	<br>
+	N.B. la creazione della GUI si basa sulla modifica del progetto ConwayLife25 in Java e visto che &egrave; stato testato ed impostato per essere estendibile &egrave; bene non modificarne la logica
+
+	<br>
+	<br>
+	Prossimi passi:
+	<br>
+	- Definizione di un Controller che faccia da ponte tra modello del dominio e WebSocket
+	<br>
+	- Definizione della pagina HTML
+	<br>
+	- Definizione del codice javascript/html/css per la visualizzazione/creazione della mappa
+	<br>
+	- Definizione del codice java (backend) per la ricezione/invio di informazioni riguardanti il gioco
+	<br>
+	- Costruzione del dispositivo di IO
+	<br>
+</div>
+
+
 <h2>Test plans</h2> 
 
 

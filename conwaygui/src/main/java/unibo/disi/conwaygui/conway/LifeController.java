@@ -6,9 +6,11 @@ public class LifeController {
     private int generationTime = 1000;
     private  Life life;
     private IOutDev outdev;
+	//private boolean stop;
 
     public LifeController(Life game){  
         this.life = game;
+		//this.stop = false;
         configureTheSystem();
      }
 
@@ -25,9 +27,23 @@ public class LifeController {
 		displayGrid();
 		play(); 		   	
     }
+
+	/*
+	public void stop(){
+		this.stop = true;
+	}
+	*/
+
+	/*
+	public void clear(){
+		life.resetGrids();
+		displayGrid();
+	}
+	*/
     
     protected void play() {
-		//while (true) {
+		//this.stop = false;
+		//while (!this.stop) {
 		for( int i=1;i<=5;i++){
 			try {
 				TimeUnit.MILLISECONDS.sleep(generationTime);
