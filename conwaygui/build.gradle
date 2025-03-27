@@ -1,5 +1,7 @@
 plugins {
-	id 'java'
+	//id 'java'
+	id 'eclipse'
+	id 'application'
 	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -15,6 +17,26 @@ java {
 
 repositories {
 	mavenCentral()
+	flatDir {   dirs '../unibolibs'	 }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
 }
 
 dependencies {
@@ -24,6 +46,32 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
+	implementation group: 'org.glassfish.tyrus.bundles', name: 'tyrus-standalone-client', version: '1.9'
+	
+	implementation name: 'uniboInterfaces'
+    implementation name: '2p301'
+    implementation name: 'unibo.basicomm23-1.0' 
+}
+
+application {
+    //Define the main class for the application.
+    mainClassName    = 'unibo.disi.conwaygui.ConwayguiApplication'
+}
+
+jar {
+    println("building jar")
+    duplicatesStrategy = duplicatesStrategy.EXCLUDE //per via di locgback.xml quando si usa spring
+    from sourceSets.main.allSource
+    from('./') {
+      include '*.pl' 
+      include '*.json'
+    }
+    manifest {
+        attributes 'Main-Class': "unibo.disi.conwaygui.ConwayguiApplication"
+    }
 }
 
 tasks.named('test') {
