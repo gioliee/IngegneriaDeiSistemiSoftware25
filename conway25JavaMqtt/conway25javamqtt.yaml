@@ -1,0 +1,26 @@
+#version: '3'
+services:
+  conwaygui:
+#    image: docker.io/natbodocker/conway25javamqtt:2.0
+    image: conway25javamqtt:2.0
+#    ports:
+#      - "7110:7110"
+    environment:
+      - MQTTBROKER_URL=tcp://192.168.1.132:1883			
+#       - HOST_IP=192.168.1.132
+      - HOST_IP=192.168.1.132
+#      - HOST_IP=130.136.113.239
+#    network_mode: "host"
+
+    networks:
+      - conwaylifenet
+
+networks:
+    conwaylifenet:
+        external: true
+
+## docker-compose -f conway25javamqtt.yaml -p conway25javamqtt up   
+
+## docker network create conwaylifenet
+## netstat -ano 
+## Wireshark

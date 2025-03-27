@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Welcome</title></head>
+    <link rel="stylesheet" href="mapstyle.css">
+	<script src="commsocket.js"></script>
+    <script src="outarea.js"></script>
+<body>
+	<h1>Conway Life</h1>
+	<p>Application name=<b><span th:text="${arg}">Still unknown</span></b>.</p>    
+<hr/>	
+ 
+<!-- INPUT AREA sendCmdToServer in commsocket.js-->		 	
+
+     <label>
+      <input type="checkbox" id="owner" onchange="handleOwnerChkbox()">OwnerOff
+     </label>
+    <br/>			
+ 	<button onClick="sendCmdToServer('start'); return false">START</button>
+ 	<button onClick="sendCmdToServer('stop');  return false">STOP</button>
+ 	<button id="clear">CLEAR</button>                          <!-- un diverso modo di gestire i button-->
+
+	<button onClick="sendCmdToServer('exit');  return false">EXIT</button>
+ 				
+            <!-- return false:
+              Il pulsante non esegua alcun comportamento predefinito 
+                  (come l'invio di un modulo, se presente).
+              L'evento click non si propaghi ad altri elementi.   
+
+              Nelle applicazioni JavaScript moderne, è più comune utilizzare i metodi 
+              event.preventDefault() e event.stopPropagation()                       
+            -->
+<!-- OUTPUT AREA-->
+	<ol id="msgslist"></ol>
+
+<!-- MAP AREA -->
+    <div >
+       <h3 class="text-center">Life Grid Map - starts in (1,1)</h3>
+       <div id="map" class="grid"></div>
+    </div>
+
+
+<script src="buttonInput.js"></script>	
+<script src="iomap.js"></script>
+</body>
+</html>
