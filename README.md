@@ -9,3 +9,4 @@ Repository per il corso di Ingegneria dei Sistemi Software 2024/2025 - Universit
 * [conway25JavaMqtt](conway25JavaMqtt): GameLife standalone che interagisce via MQTT con il mondo esterno
 * [conwayguialone](conwayguialone): Servizio SpringBoot che offre la GUI per intergasice via MQTT con conway25JavaMqtt
 * [Relazione Fase 1](Fase1ISS25-RussoAngela.pdf)
+* [Relazione Fase 2](Fase2ISS25RussoAngela.pdf)
